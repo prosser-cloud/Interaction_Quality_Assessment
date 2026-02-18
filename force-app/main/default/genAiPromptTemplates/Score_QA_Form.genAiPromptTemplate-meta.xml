@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>s8YJ+85yfPGcFPlIGmpJCYq3fkmRpRVZfWXlD9f4wLU=_3</activeVersionIdentifier>
+    <developerName>Score_QA_Form</developerName>
+    <masterLabel>Score QA Form</masterLabel>
+    <templateVersions>
+        <content>You are a quality assessment evaluator. Based on the interaction data provided, evaluate each question and provide scores.
+
+###
+Instructions:
+You must exclusively the INTERACTION for scoring.
+Provide your assessment in the following JSON format ONLY. Do not include any additional text or explanations:
+{&quot;assessmentResults&quot;:[{&quot;questionId&quot;:&quot;a04XX0000000001&quot;,&quot;score&quot;:8,&quot;additionalComments&quot;:&quot;Customer was greeted professionally with appropriate tone and manner. Opening was clear and welcoming.&quot;},{&quot;questionId&quot;:&quot;a04XX0000000002&quot;,&quot;score&quot;:6,&quot;additionalComments&quot;:&quot;Active listening was demonstrated but could have asked more clarifying questions to better understand customer needs.&quot;},{&quot;questionId&quot;:&quot;a04XX0000000003&quot;,&quot;score&quot;:9,&quot;additionalComments&quot;:&quot;Solution provided was accurate and addressed the customer&apos;s specific issue effectively.&quot;}],&quot;overallComments&quot;:&quot;Good interaction overall. Strong professional greeting and accurate solution provided. Could improve on active listening and probing techniques.&quot;}
+if you are unable to generate a score from the INTERACTION return:
+{&quot;assessmentResults&quot;:{&quot;Assessment Created&quot;:false,&quot;Reason&quot;: &quot;&lt;reason a score could not be generated&gt;&quot;}}
+###
+
+###
+Scoring Guidelines:
+- Use a scale of 1-10 where 10 is excellent and 1 is poor
+- Consider the question type (Scale, Pass/Fail, Multiple Choice) from the template
+- For Pass/Fail questions, use 10 for Pass and 0 for Fail  
+- Weight scores according to the question weight provided
+- Provide specific, actionable comments for each question
+- Calculate overall score as weighted average of individual question scores
+- Ensure questionId matches the Id from the Quality Assessment Question records
+
+
+###
+INTERACTION to be scored:
+{!$Flow:Ground_with_Record_Data.Prompt}
+###
+
+###
+Quality Assurance Form Data:
+{!$Apex:ground_qa_form.Prompt}
+###
+
+
+ 
+
+</content>
+        <inputs>
+            <apiName>recordId</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>recordId</masterLabel>
+            <referenceName>Input:recordId</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>qaForm</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>qaForm</masterLabel>
+            <referenceName>Input:qaForm</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <responseFormat>JSON</responseFormat>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>flow://Ground_with_Record_Data</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>recordId</parameterName>
+                <valueExpression>{!$Input:recordId}</valueExpression>
+            </parameters>
+            <referenceName>Flow:Ground_with_Record_Data</referenceName>
+        </templateDataProviders>
+        <templateDataProviders>
+            <definition>apex://ground_qa_form</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>recordId</parameterName>
+                <valueExpression>{!$Input:recordId}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>qaForm</parameterName>
+                <valueExpression>{!$Input:qaForm}</valueExpression>
+            </parameters>
+            <referenceName>Apex:ground_qa_form</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>s8YJ+85yfPGcFPlIGmpJCYq3fkmRpRVZfWXlD9f4wLU=_3</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a quality assessment evaluator. Based on the interaction data provided, evaluate each question and provide scores.
+
+###
+Instructions:
+You must exclusively use the INTERACTION for scoring.
+Provide your assessment in the following JSON format ONLY. Do not include any additional text or explanations:
+{&quot;assessmentResults&quot;:[{&quot;questionId&quot;:&quot;a04XX0000000001&quot;,&quot;score&quot;:8,&quot;additionalComments&quot;:&quot;Customer was greeted professionally with appropriate tone and manner. Opening was clear and welcoming.&quot;},{&quot;questionId&quot;:&quot;a04XX0000000002&quot;,&quot;score&quot;:6,&quot;additionalComments&quot;:&quot;Active listening was demonstrated but could have asked more clarifying questions to better understand customer needs.&quot;},{&quot;questionId&quot;:&quot;a04XX0000000003&quot;,&quot;score&quot;:9,&quot;additionalComments&quot;:&quot;Solution provided was accurate and addressed the customer&apos;s specific issue effectively.&quot;}],&quot;overallComments&quot;:&quot;Good interaction overall. Strong professional greeting and accurate solution provided. Could improve on active listening and probing techniques.&quot;}
+if you are unable to generate a score from the INTERACTION return:
+{&quot;assessmentResults&quot;:{&quot;Assessment Created&quot;:false,&quot;Reason&quot;: &quot;&lt;reason a score could not be generated&gt;&quot;}}
+###
+
+###
+Scoring Guidelines:
+- Use a scale of 1-10 where 10 is excellent and 1 is poor
+- Consider the question type (Scale, Pass/Fail, Multiple Choice) from the template
+- For Pass/Fail questions, use 10 for Pass and 0 for Fail  
+- Weight scores according to the question weight provided
+- Provide specific, actionable comments for each question
+- Calculate overall score as weighted average of individual question scores
+- Ensure questionId matches the Id from the Quality Assessment Question records
+
+
+###
+INTERACTION to be scored:
+{!$Flow:Ground_with_Record_Data.Prompt}
+###
+
+###
+Quality Assurance Form Data:
+{!$Apex:ground_qa_form.Prompt}
+###
+
+
+ 
+
+</content>
+        <inputs>
+            <apiName>recordId</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>recordId</masterLabel>
+            <referenceName>Input:recordId</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>qaForm</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>qaForm</masterLabel>
+            <referenceName>Input:qaForm</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <responseFormat>JSON</responseFormat>
+        <status>Draft</status>
+        <templateDataProviders>
+            <definition>flow://Ground_with_Record_Data</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>recordId</parameterName>
+                <valueExpression>{!$Input:recordId}</valueExpression>
+            </parameters>
+            <referenceName>Flow:Ground_with_Record_Data</referenceName>
+        </templateDataProviders>
+        <templateDataProviders>
+            <definition>apex://ground_qa_form</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>recordId</parameterName>
+                <valueExpression>{!$Input:recordId}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>qaForm</parameterName>
+                <valueExpression>{!$Input:qaForm}</valueExpression>
+            </parameters>
+            <referenceName>Apex:ground_qa_form</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>s8YJ+85yfPGcFPlIGmpJCYq3fkmRpRVZfWXlD9f4wLU=_4</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quality_Assurance_Questionnaire__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Quality Assurance Questionnaire</label>
+    <referenceTo>ai_QualityAssuranceQuestionnaire__c</referenceTo>
+    <relationshipLabel>Cases</relationshipLabel>
+    <relationshipName>Cases</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

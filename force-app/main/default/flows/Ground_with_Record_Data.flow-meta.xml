@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Interactions</name>
+        <label>Get Interactions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>CaseInteractionRetriever</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Case_Interactions</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CaseInteractionRetriever</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Get_Transcript</name>
+        <label>Get Transcript</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>getConvTscpForRecord</actionName>
+        <actionType>getConvTscpForRecord</actionType>
+        <connector>
+            <targetReference>Transcript</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>getConvTscpForRecord</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Case_Interactions</name>
+        <elementSubtype>AddPromptInstructions</elementSubtype>
+        <label>Case Interactions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Output.Prompt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>Here is the case and related conversations between the agent and the customer:
+{!Get_Interactions.jsonOutput}
+</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>No_Additional_Instructions</name>
+        <elementSubtype>AddPromptInstructions</elementSubtype>
+        <label>No Additional Instructions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Output.Prompt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>Interaction data is not available. 
+</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Transcript</name>
+        <elementSubtype>AddPromptInstructions</elementSubtype>
+        <label>Transcript</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Output.Prompt</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>Here is the transcript from a voice call or chat session between the agent and the customer. &apos;End User&apos; represents the customer. Use this transcript as your primary source for scoring.
+{!Get_Transcript.conversationTranscript}
+</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Record_Type</name>
+        <label>Record Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>No_Additional_Instructions</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Non-Supported Objects</defaultConnectorLabel>
+        <rules>
+            <name>Voice_Call_Messaging</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>0LQ</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>0Mw</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Transcript</targetReference>
+            </connector>
+            <label>Voice Call/Messaging</label>
+        </rules>
+        <rules>
+            <name>Case</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>500</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Interactions</targetReference>
+            </connector>
+            <label>Case</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Ground with Record Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Ground with Record Data</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>PromptFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Record_Type</targetReference>
+        </connector>
+        <triggerType>Capability</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Question_Details__c</fullName>
+    <inlineHelpText>Describe the &apos;why&apos; behind the question, what makes this question successful, or other details that may be important when reviewing the interaction.</inlineHelpText>
+    <label>Question Details</label>
+    <length>32768</length>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>3</visibleLines>
+</CustomField>

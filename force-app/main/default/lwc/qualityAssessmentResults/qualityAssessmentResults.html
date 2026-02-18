@@ -1,0 +1,116 @@
+<template>
+    <lightning-card title="Quality Assessment Results" icon-name="standard:assessment">
+        <div slot="actions">
+            <template if:true={assessmentData}>
+                <div class="overall-score-container">
+                    <span class="overall-score-label">Overall Score:</span>
+                    <span class={overallScoreClass}>{overallScoreFormatted}/10</span>
+                </div>
+            </template>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading assessment results..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>Error loading assessment results: {error.body.message}</h2>
+                </div>
+            </template>
+
+            <template if:true={hasData}>
+                <div class="assessment-header slds-m-bottom_large">
+                    <h2 class="slds-text-heading_medium">{assessmentData.assessmentName}</h2>
+                </div>
+
+                <template for:each={assessmentData.sections} for:item="section">
+                    <div key={section.sectionName} class="section-container slds-m-bottom_large">
+                        <div class="section-header clickable" onclick={handleSectionToggle} data-section-id={section.sectionId}>
+                            <div class="section-header-left">
+                                <lightning-icon 
+                                    icon-name={section.expandIcon}
+                                    size="small"
+                                    class="expand-icon">
+                                </lightning-icon>
+                                <h3 class="section-title">{section.sectionName}</h3>
+                            </div>
+                            <div class="section-score-container">
+                                <span class="section-score-label">Section Score:</span>
+                                <span class={section.sectionScoreClass}>
+                                    {section.sectionScoreFormatted}/10
+                                </span>
+                            </div>
+                        </div>
+
+                        <template if:true={section.isExpanded}>
+                            <div class="questions-grid">
+                                <template for:each={section.questions} for:item="question">
+                                <div key={question.id} class="question-card">
+                                    <div class="question-header">
+                                        <div class="question-info">
+                                            <lightning-icon 
+                                                icon-name={question.questionTypeIcon}
+                                                size="x-small"
+                                                class="question-type-icon">
+                                            </lightning-icon>
+                                            <span class="question-type">{question.questionType}</span>
+                                            <template if:true={question.weight}>
+                                                <span class="question-weight">Weight: {question.weight}</span>
+                                            </template>
+                                        </div>
+                                        <div class="question-score-container">
+                                            <span class={question.questionScoreClass}>
+                                                {question.questionScoreFormatted}
+                                                <template if:false={question.passFailQuestion}>/10</template>
+                                                <template if:true={question.showPassFail}>
+                                                    {question.passFailText}
+                                                </template>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="question-content">
+                                        <h4 class="question-text">{question.questionText}</h4>
+                                        <template if:true={question.questionDetails}>
+                                            <p class="question-details">{question.questionDetails}</p>
+                                        </template>
+                                        
+                                        <template if:true={question.multiChoiceOptions}>
+                                            <div class="multi-choice-options">
+                                                <span class="options-label">Options:</span>
+                                                <span class="options-text">{question.multiChoiceOptions}</span>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={question.additionalComments}>
+                                            <div class="comments-section">
+                                                <h5 class="comments-label">Assessment Comments:</h5>
+                                                <p class="comments-text">{question.additionalComments}</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={hasData}>
+                <template if:false={isLoading}>
+                    <template if:false={error}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <p class="slds-text-color_weak">No assessment results found for this record.</p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
