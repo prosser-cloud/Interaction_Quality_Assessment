@@ -5,7 +5,7 @@ A sample Salesforce package for evaluating customer interaction quality across m
 ## Overview
 
 This package provides a sample configuration for a structured framework for quality assurance teams to assess and score customer interactions using configurable questionnaires. It leverages AI-powered scoring capabilities to ensure consistent quality evaluation across all customer touchpoints. This package should _not_ be deployed as is, it should be used as an example. This project was developed using, in part, AI. 
-+
+
 ## Key Features
 
 - **Multi-Channel Assessment**: Evaluate quality across Cases, Messaging Sessions, and Voice Calls
